@@ -30,26 +30,43 @@ const Fruit = mongoose.model("Fruit", fruitSchema);
 
 // now let's create a new fruit document
 const fruit = new Fruit({
-  // name: "Apple",
+  name: "Apple",
   rate: 9,
   review: "Pretty solid as a fruit"
 });
 
 // now let's save() to save fruit inside four fruits collection inside FruitsDB
-fruit.save();
+// fruit.save();
 
 const personSchema = new mongoose.Schema({
   name: String,
-  age: Number
+  age: Number,
+  favoriteFruit: fruitSchema
 });
 
 const Person = mongoose.model("Person", personSchema);
 
-const person = new Person({
-  name: "John",
-  age: 37
+const pineapple = new Fruit({
+  name: "pineapple",
+  rate: 9,
+  review: "Great fruit"
 });
 
+const pear = new Fruit({
+  name: "Pear",
+  rate: 8,
+  review: "Love this fruit"
+});
+
+
+const person = new Person({
+  name: "Amy",
+  age: 12,
+  favoriteFruit: pineapple
+});
+
+// pineapple.save();
+pear.save();
 // person.save();
 
 // creating more documents and add them into our collections in one go
@@ -78,15 +95,15 @@ const pinneapple = new Fruit({
 //   }
 // })
 
+
 // reading from database witg mongoose
 // use our model which here Fruit and invoke find(). 
 //Find takes a callback function and has two parameters: err and whatever we get back, here we will call fruits
+
 Fruit.find(function(err, fruits){
-  
   if(err){
     console.log(err)
   }else {
-
     mongoose.connection.close() // to close the connection when we are done with find() and therefore we'll need to use conrol c anymore
     fruits.forEach((fruit) =>{
       console.log(fruit.name)
@@ -94,27 +111,46 @@ Fruit.find(function(err, fruits){
   }
 })
 
-// Data validation 
+// Updating and deleting using mongoose
+
+// Fruit.updateOne({_id:"5fd6bc90b4bdc121dc6b5a64"}, {name: "Peach"}, function(err){
+//     if(err){
+//       console.log(err)
+//     }else{
+//       console.log("Document has been successfully updated")
+//     }
+// });
+
+
+// Fruit.deleteOne({name: "Orange"}, (err) =>{
+//   if(err){
+//     console.log(err)
+//   }else{
+//     console.log("Doc has been successfully deleted")
+//   }
+// })
+
+// Fruit.deleteMany({name: "Apple"}, (err) =>{
+//   if(err){
+//     console.log(err)
+//   }else{
+//     console.log("docs have been successfully deleted")
+//   }
+// })
+
+// Etablishing relationships and embedded docs using mongoose
+
+Person.updateOne({name:"John"}, {favoriteFruit: pear}, (err)=>{
+  if(err){
+    console.log(err)
+  }else{
+    console.log("doc has been updated")
+  }
+})
 
 
 
 
 
-
-
-
-
-
-// const findDocuments = function(db, callback){
-  
-//   const collection = db.collection('fruits');
-
-//   collection.find({}).toArray(function(err, fruits){
-//     assert.equal(err, null);
-//     console.log("Found the following records");
-//     console.log(fruits);
-//     callback(fruits)
-//   })
-// };
 
 
